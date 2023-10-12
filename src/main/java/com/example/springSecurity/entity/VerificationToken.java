@@ -1,12 +1,14 @@
 package com.example.springSecurity.entity;
 
 import lombok.Data;
-
+import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class VerificationToken {
     private static final int EXPIRATION_TIME = 10;
     @Id
@@ -29,6 +31,16 @@ public class VerificationToken {
         this.expirationTime = calculateExpirationDate(EXPIRATION_TIME);
     }
 
+    public VerificationToken(String token){
+        super();
+        this.token = token;
+        this.expirationTime=calculateExpirationDate(EXPIRATION_TIME);
+    }
+
     private Date calculateExpirationDate(int expirationTime) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(new Date().getTime());
+        calendar.add(Calendar.MINUTE,EXPIRATION_TIME);
+        return new Date(calendar.getTime().getTime());
     }
 }
